@@ -15,6 +15,39 @@ from z3 import Solver
 # What is the minimal total running time?
 
 
+def main():
+    s = Solver()
+    optimize = Optimize()
+    total_running_time_var = Int("tot_run_time")
+    jobs = {}
+    for i in range(1, 11):
+        jobs[i] = JobTask(s, total_running_time_var, i)
+
+    set_job_to_start_after_other_jobs(s, jobs[3], jobs[1])
+    set_job_to_start_after_other_jobs(s, jobs[3], jobs[2])
+
+    set_job_to_start_after_other_jobs(s, jobs[6], jobs[2])
+    set_job_to_start_after_other_jobs(s, jobs[6], jobs[4])
+
+    set_job_to_start_after_other_jobs(s, jobs[7], jobs[1])
+    set_job_to_start_after_other_jobs(s, jobs[7], jobs[4])
+    set_job_to_start_after_other_jobs(s, jobs[7], jobs[5])
+
+    set_job_to_start_after_other_jobs(s, jobs[8], jobs[3])
+    set_job_to_start_after_other_jobs(s, jobs[8], jobs[6])
+
+    set_job_to_start_after_other_jobs(s, jobs[9], jobs[6])
+    set_job_to_start_after_other_jobs(s, jobs[9], jobs[7])
+
+    set_job_to_start_after_other_jobs(s, jobs[10], jobs[8])
+    set_job_to_start_after_other_jobs(s, jobs[10], jobs[9])
+
+    optimize.minimize(total_running_time_var)
+
+    print(s.check())
+    print(s.model())
+
+
 @dataclass(frozen=False, order=True)  # frozen = false as this needs to be mutable
 class JobTask:
     solver: Solver
@@ -52,39 +85,6 @@ def set_job_to_start_after_other_jobs(
     solver: Solver, job_to_start: JobTask, jobs_to_finish_first: JobTask
 ):
     solver.add(job_to_start.start_time_var >= jobs_to_finish_first.end_time_var)
-
-
-def main():
-    s = Solver()
-    optimize = Optimize()
-    total_running_time_var = Int("tot_run_time")
-    jobs = {}
-    for i in range(1, 11):
-        jobs[i] = JobTask(s, total_running_time_var, i)
-
-    set_job_to_start_after_other_jobs(s, jobs[3], jobs[1])
-    set_job_to_start_after_other_jobs(s, jobs[3], jobs[2])
-
-    set_job_to_start_after_other_jobs(s, jobs[6], jobs[2])
-    set_job_to_start_after_other_jobs(s, jobs[6], jobs[4])
-
-    set_job_to_start_after_other_jobs(s, jobs[7], jobs[1])
-    set_job_to_start_after_other_jobs(s, jobs[7], jobs[4])
-    set_job_to_start_after_other_jobs(s, jobs[7], jobs[5])
-
-    set_job_to_start_after_other_jobs(s, jobs[8], jobs[3])
-    set_job_to_start_after_other_jobs(s, jobs[8], jobs[6])
-
-    set_job_to_start_after_other_jobs(s, jobs[9], jobs[6])
-    set_job_to_start_after_other_jobs(s, jobs[9], jobs[7])
-
-    set_job_to_start_after_other_jobs(s, jobs[10], jobs[8])
-    set_job_to_start_after_other_jobs(s, jobs[10], jobs[9])
-
-    optimize.minimize(total_running_time_var)
-
-    print(s.check())
-    print(s.model())
 
 
 if __name__ == "__main__":
