@@ -1,4 +1,3 @@
-
 from z3 import Int
 from z3 import Optimize
 from z3 import And
@@ -41,7 +40,7 @@ def main():
     duration_var_7 = Int(f"duration{7}")
     duration_var_8 = Int(f"duration{8}")
     duration_var_9 = Int(f"duration{9}")
-    duration_var_10= Int(f"duration{10}")
+    duration_var_10 = Int(f"duration{10}")
 
     solver.add(duration_var_1 == 10 + 1)
     solver.add(duration_var_2 == 10 + 2)
@@ -53,7 +52,6 @@ def main():
     solver.add(duration_var_8 == 10 + 8)
     solver.add(duration_var_9 == 10 + 9)
     solver.add(duration_var_10 == 10 + 10)
-
 
     solver.add(And(start_var_1 >= 0, start_var_1 < end_var_1))
     solver.add(And(start_var_2 >= 0, start_var_2 < end_var_2))
@@ -91,7 +89,6 @@ def main():
     optimize.minimize(time_var)
     print(solver.check())
     print(solver.model())
-   
 
 
 1
@@ -104,7 +101,6 @@ def main():
 8
 9
 10
-
 
 
 if __name__ == "__main__":
